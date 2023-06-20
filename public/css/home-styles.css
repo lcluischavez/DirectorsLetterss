@@ -95,12 +95,12 @@ html, body{
 
 }
 .proj-two{
-    background-image: url('/images/femalechoir6.jpg');
-    background-size: cover;
+    background-image: url('/images/choral-conductor.webp');
+    background-size: 360px;
     background-repeat: no-repeat;
     /* background-position-x: 50% center; */
     /* background-position: 160% 5%; */
-    background-position-y: 50% right;
+    background-position: 50% 50%;
     position: relative;
     bottom: 50px;
     color: white;
@@ -119,11 +119,11 @@ html, body{
 }
 
 .proj-three{
-    background-image: url('/images/maleconductor.jpg');
+    background-image: url('/images/femalechoir6.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     /* background-position-x: center; */
-    background-position: 45% 0;
+    background-position: 85% 0;
     position: relative;
     bottom: 50px;
     color: white;
@@ -334,7 +334,9 @@ html, body{
     background-color: #222;
     color: white;
     font-family: 'Poppins', sans-serif;
-    
+    padding-top: 5rem;
+    margin-top: 15rem;
+   
 }
 
 .footer-links{
@@ -343,17 +345,24 @@ html, body{
 }
 
 .links-wrapper{
-    width: 270px;
+    width: 280px;
 }
+
+
 .links-wrapper h2{
     text-align: center;
     font-size: 20px;
     font-weight: 700;
+    width: 200px;
+    margin: 0 auto;
+    /* padding-right: 5rem; */
+    
 }
 .link-list{
-    padding: 0;
+    padding-top: 1rem;
     margin: 0;
-    padding-left: 6.5rem;
+    padding-left: 7.5rem;
+    
     
 }
 
@@ -373,6 +382,7 @@ html, body{
     padding: 0;
     margin: 0;
     justify-content: center;
+   
 }
 
 .social-links li{
@@ -385,4 +395,110 @@ html, body{
 .fineprint{
     text-align: center;
     padding-top: 4rem;
+}
+
+
+/* contact */
+
+.about-hero-img{
+    height: 450px;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ),  url('/images/contact-img1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* background-position-x: center; */
+    background-position: 0 40%;
+    display: flex;
+}
+
+.heading{
+    padding-top: 10rem;
+
+}
+
+.contact-img img{
+    width: 500px;
+    height: auto;
+    padding-top: 4rem;
+   
+}
+
+.heading{
+    
+    /* margin: 0 20rem; */
+    max-width: 900px;
+    margin: 0 auto;
+    
+}
+
+.heading h5{
+    color: #b0b0b0;
+    font-weight: 400;
+    font-size: 18px;
+}
+.heading h3{
+    font-size: 30px;
+    margin-bottom: 2rem;
+}
+
+.form-header h5{
+    color: #b0b0b0;
+    font-weight: 400;
+    font-size: 14px;
+    padding-top: 0.5rem;
+}
+
+.contact-container{
+    display: flex;
+    justify-content: center;
+    margin: 0 16rem;
+    
+}
+
+.header-row{
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    max-width: 1100px;
+    justify-content: center;
+}
+
+.form-header{
+    width: 350px;
+    margin-left: 10rem;
+    
+}
+.form{
+    margin-left: 10rem;
+    padding-top: 1rem;
+}
+
+.contact-header{
+    margin-right: 10rem;
+}
+
+.contact-row{
+    margin-top: 2rem;
+   
+}
+
+.contact-row input{
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: blue
+}
+
+.email input{
+    width: 88%;
+    margin-top: 2rem;
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: blue
+}
+
+.msg textarea{
+    width: 88%;
+    margin-top: 2rem;
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: blue
 }
