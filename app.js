@@ -102,6 +102,14 @@ app.get("/home", function(req,res){
   
   });
 
+  app.get("/aboutus", function(req,res){
+
+
+    
+    res.render('about')
+
+
+});
 
 app.get("/contact", function(req,res){
     res.render('contact')
