@@ -102,6 +102,14 @@ app.get("/home", function(req,res){
   
   });
 
+  app.get("/aboutus", function(req,res){
+
+
+    
+    res.render('about')
+
+
+});
 
 const PORT = process.env.PORT || 3000
 
