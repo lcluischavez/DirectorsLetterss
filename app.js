@@ -66,12 +66,12 @@ passport.deserializeUser(User.deserializeUser());
 // const Post = mongoose.model("Post", postSchema);
 
 
-const aboutSchema = new mongoose.Schema({
-  title: String,
-  content: String,
+// const aboutSchema = new mongoose.Schema({
+//   title: String,
+//   content: String,
 
-})
-const About = mongoose.model("About", aboutSchema);
+// })
+// const About = mongoose.model("About", aboutSchema);
 const homeStartingContent = "";
 const aboutContent = " about zach";
 const contactContent = "contact zach";
@@ -110,6 +110,15 @@ app.get("/home", function(req,res){
 
 
 });
+
+app.get("/contact", function(req,res){
+    res.render('contact')
+});
+
+app.get('/aboutus', function(req,res){
+    res.render('about')
+});
+
 
 const PORT = process.env.PORT || 3000
 
