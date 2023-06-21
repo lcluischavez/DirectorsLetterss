@@ -124,6 +124,23 @@ app.get('/letters', function(req,res){
 });
 
 
+app.get('/banddirectorletters', function(req,res){
+  res.render('banddirectorletters')
+});
+
+app.get('/choirdirectorletters', function(req,res){
+  res.render('choirdirectorletters')
+});
+
+app.get('/orchestradirectorletters', function(req,res){
+  res.render('orchestradirectorletters')
+});
+
+app.get('/musicaltheaterdirectorletters', function(req,res){
+  res.render('musicaltheaterdirectorletters')
+});
+
+
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, function() {
