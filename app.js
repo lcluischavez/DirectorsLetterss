@@ -119,6 +119,10 @@ app.get('/aboutus', function(req,res){
     res.render('about')
 });
 
+app.get('/letters', function(req,res){
+  res.render('letters')
+});
+
 
 const PORT = process.env.PORT || 3000
 
