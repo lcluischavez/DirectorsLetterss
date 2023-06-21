@@ -89,16 +89,18 @@ html, body{
     position: relative;
     top: 310px;
     font-size: 18px;
+    /* writing-mode: vertical-lr;
+    text-orientation: upright; */
     
 
 }
 .proj-two{
-    background-image: url('/images/femalechoir6.jpg');
-    background-size: cover;
+    background-image: url('/images/choral-conductor.webp');
+    background-size: 360px;
     background-repeat: no-repeat;
     /* background-position-x: 50% center; */
     /* background-position: 160% 5%; */
-    background-position-y: 50% right;
+    background-position: 50% 50%;
     position: relative;
     bottom: 50px;
     color: white;
@@ -117,11 +119,11 @@ html, body{
 }
 
 .proj-three{
-    background-image: url('/images/maleconductor.jpg');
+    background-image: url('/images/femalechoir6.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     /* background-position-x: center; */
-    background-position: 45% 0;
+    background-position: 85% 0;
     position: relative;
     bottom: 50px;
     color: white;
@@ -176,6 +178,59 @@ html, body{
 
 .about{
     height: 500px;
+    display: flex;
+    justify-content: center;
+    margin: 6rem 0;
+    padding-top: 2rem;
+    
+}
+
+#about-logo{
+    display: flex;
+    height: 80%;
+    width: 80%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-left: 8rem;
+    padding-top: 5rem;
+}
+
+.about-title{
+    font-family: 'Poppins', sans-serif;
+    font-size: 50px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    margin: 2rem 8rem;
+
+}
+
+.about{
+    background-color: #f8f9fe;
+    margin: 8rem 15rem;
+    margin-bottom: 15rem;
+   
+    
+}
+
+.about-text h3{
+    font-size: 30px;
+    font-weight: 600;
+}
+.about-body{
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    margin: 2rem 8rem;
+}
+
+.about-page-link{
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    margin: 2rem 8rem;
 }
 
 .web-one, .web-two, .web-three{
@@ -197,7 +252,8 @@ html, body{
     box-shadow: 0px 3px 8px rgb(68, 68, 68);
     margin: 0 10px;
     border-radius: 5px;
-    background-color: #d5c7ac;
+    cursor: pointer;
+    /* background-color: #d5c7ac; */
 }
 
 .web-two{
@@ -214,6 +270,7 @@ html, body{
     box-shadow: 0px 3px 8px rgb(68, 68, 68);
     margin: 0 10px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .web-three{
@@ -229,6 +286,7 @@ html, body{
     box-shadow: 0px 3px 8px rgb(68, 68, 68);
     margin: 0 10px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .web-one h5, .web-two h5, .web-three h5{
@@ -272,3 +330,224 @@ html, body{
    
 }
 
+.footer{
+    background-color: #222;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    padding-top: 5rem;
+    margin-top: 15rem;
+   
+}
+
+.footer-links{
+    display: flex;
+    justify-content: center;
+}
+
+.links-wrapper{
+
+    width: 280px;
+
+}
+
+
+.links-wrapper h2{
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    width: 200px;
+    margin: 0 auto;
+    /* padding-right: 5rem; */
+    
+}
+.link-list{
+    padding-top: 1rem;
+    margin: 0;
+    padding-left: 7.5rem;
+    
+    
+}
+
+.link-list li{
+    list-style: none;
+    font-weight: 500;
+    align-items: left;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    
+}
+
+.social-links{
+    display: flex;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+   
+}
+
+.social-links li{
+    list-style: none;
+    margin: 1rem;
+    font-size: 20px;
+}
+
+
+.fineprint{
+    text-align: center;
+    padding-top: 4rem;
+}
+
+
+
+/* contact */
+
+.about-hero-img{
+    height: 450px;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ),  url('/images/contact-img1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* background-position-x: center; */
+    background-position: 0 40%;
+    display: flex;
+}
+
+.heading{
+    padding-top: 10rem;
+
+}
+
+.contact-img img{
+    width: 500px;
+    height: auto;
+    padding-top: 4rem;
+   
+}
+
+.heading{
+    
+    /* margin: 0 20rem; */
+    max-width: 900px;
+    margin: 0 auto;
+    
+}
+
+.heading h5{
+    color: #b0b0b0;
+    font-weight: 400;
+    font-size: 18px;
+}
+.heading h3{
+    font-size: 30px;
+    margin-bottom: 2rem;
+}
+
+.form-header h5{
+    color: #b0b0b0;
+    font-weight: 400;
+    font-size: 14px;
+    padding-top: 0.5rem;
+}
+
+.contact-container{
+    display: flex;
+    justify-content: center;
+    margin: 0 16rem;
+    
+}
+
+.header-row{
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    max-width: 1100px;
+    justify-content: center;
+}
+
+.form-header{
+    width: 350px;
+    margin-left: 10rem;
+    
+}
+.form{
+    margin-left: 10rem;
+    padding-top: 1rem;
+}
+
+.contact-header{
+    margin-right: 10rem;
+}
+
+.contact-row{
+    margin-top: 2rem;
+   
+}
+
+.contact-row input{
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: blue
+}
+
+.email input{
+    width: 88%;
+    margin-top: 2rem;
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: blue
+}
+
+.msg textarea{
+    width: 88%;
+    margin-top: 2rem;
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: blue
+}
+
+
+/*-----------About Page---------------*/
+
+.about-hero{
+    height: 500px;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ),  url('/images/ChoirCollegeChoir.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* background-position-x: center; */
+    background-position: 0 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: white;   
+    font-size: 70px
+}
+
+.about-section {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f9fe;
+    margin-left: 14rem;
+    margin-right: 14rem;
+    margin-top: 8rem;
+    margin-bottom: 8rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    padding-right: 10rem;
+    padding-left: 10rem;
+    font-family: 'Poppins', sans-serif;   
+}
+
+.about-heading {
+    display: flex;
+    align-self: baseline;
+}
+
+p {
+    text-indent: 2rem;
+
+}
