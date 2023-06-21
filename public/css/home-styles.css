@@ -505,6 +505,29 @@ html, body{
     border-color: blue
 }
 
+.more-info{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 10rem;
+
+}
+.social-media-icons{
+    display: flex;
+    align-items: left;
+    margin: 0 auto;
+    padding-left: 1rem;
+   
+}
+
+.social-media-icons img{
+    height: 20px
+}
+
+.social-media-icons li{
+    list-style: none;
+    margin-right: 1.5rem;
+}
+
 /*-----------About Page---------------*/
 
 .about-hero{
