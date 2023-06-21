@@ -350,6 +350,15 @@ html, body{
 
 }
 
+.links-wrapper a{
+    color: white;
+    
+}
+
+.links-wrapper h2 a{
+    text-decoration: none;
+}
+
 
 .links-wrapper h2{
     text-align: center;
@@ -376,6 +385,10 @@ html, body{
     flex-direction: column;
     text-align: left;
     
+}
+
+.link-list a{
+    color: white;
 }
 
 .social-links{
@@ -572,4 +585,11 @@ h1 {
 p {
     text-indent: 2rem;
 
+}
+
+
+/* letters */
+
+.about-section a{
+    color: black;
 }
