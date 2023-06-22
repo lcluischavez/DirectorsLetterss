@@ -7,15 +7,6 @@ html, body{
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-.navbar{
-    padding-bottom: 0;
-    margin-bottom: 0;
-    background-color: rgb(6, 6, 6);
-    border: none;
-    outline: none;
-    border-radius: 0%;
-    padding: 0 9rem;
-}
 
 .container{
     width: 100%;
@@ -173,8 +164,7 @@ html, body{
 }
 
 .dropdown-categories{
-    background-color: #c4edfa;
-}
+    background-color: #f5d37a}
 
 .about{
     height: 500px;
@@ -322,7 +312,7 @@ html, body{
 .connect-button button{
     width: 14rem;
     height: 5rem;
-    background-color: #c4edfa;
+    background-color: #f5d37a;
     color: black;
     font-size: 16px;
     font-weight: 500;
@@ -592,4 +582,57 @@ p {
 
 .about-section a{
     color: black;
+}
+
+/* --------NAV--------- */
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+ul.nav {
+    list-style: none;
+    background: rgb(6, 6, 6);
+    margin-bottom: auto;
+}
+
+ul.nav li {
+    display: inline-block;
+    position: relative;
+}
+
+ul.nav li a {
+    display: block;
+    padding: 20px 25px;
+    color: #FFF;
+    text-decoration: none;
+    text-align: center;
+    font-size: 18px;
+}
+
+ul.nav li ul.dropdown li {
+    display: block;
+}
+
+ul.nav li ul.dropdown{
+    width: 270%;
+    background: rgba(245, 211, 122, 0.8);
+    position: absolute;
+    z-index: 999;
+    display: none;
+}
+
+ul.nav li a:hover {
+    background: #EEB522; 
+}
+
+ul.nav li:hover ul.dropdown{
+    display: block;
+}
+
+.nav {
+    display: flex;
+    justify-content: flex-end;
 }
