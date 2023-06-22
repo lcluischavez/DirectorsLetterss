@@ -172,7 +172,6 @@ html, body{
     justify-content: center;
     margin: 6rem 0;
     padding-top: 2rem;
-    
 }
 
 #about-logo{
@@ -196,7 +195,7 @@ html, body{
 }
 
 .about{
-    background-color: #f8f9fe;
+    background-color:  #f9e5af;
     margin: 8rem 15rem;
     margin-bottom: 15rem;
    
@@ -290,7 +289,7 @@ html, body{
 
 .connect-container{
     height: 210px;
-    background-color: #f8f9fe;
+    background-color:  #f9e5af;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -512,7 +511,15 @@ html, body{
     display: flex;
     justify-content: space-evenly;
     margin-top: 10rem;
-
+    background-color: #f9e5af;
+    margin-left: 14rem;
+    margin-right: 14rem;
+    margin-top: 8rem;
+    margin-bottom: 8rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    padding-right: 10rem;
+    padding-left: 10rem;
 }
 .social-media-icons{
     display: flex;
@@ -555,7 +562,7 @@ h1 {
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
-    background-color: #f8f9fe;
+    background-color: #f9e5af;
     margin-left: 14rem;
     margin-right: 14rem;
     margin-top: 8rem;
@@ -625,7 +632,7 @@ ul.nav li ul.dropdown{
 }
 
 ul.nav li a:hover {
-    background: #EEB522; 
+    background: #f5d37a; 
 }
 
 ul.nav li:hover ul.dropdown{
