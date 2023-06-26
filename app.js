@@ -11,10 +11,68 @@ const passport = require('passport');
 passportLocalMongoose = require('passport-local-mongoose')
 const methodOverride = require('method-override');
 const { stringify } = require("querystring");
-
-
-
 const app = express();
+
+
+const mysql = require('mysql');
+
+// Create a connection pool
+const pool = mysql.createPool({
+  host: '127.0.0.1',
+  user: 'root',
+  password: '1234',
+  database: 'directors-lettersDB',
+});
+
+// Test the connection
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+  } else {
+    console.log('Connected to the database!');
+    connection.release();
+  }
+});
+
+// CRUD
+function createLetter(letterData, callback) {
+  const query = 'INSERT INTO Letters (letter_title, content, letter_type_id, letter_writer_id, letter_category_id) VALUES (?, ?, ?, ?, ?)';
+  const values = [
+    letterData.title,
+    letterData.content,
+    letterData.typeId,
+    letterData.writerId,
+    letterData.categoryId
+  ];
+
+  pool.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error creating letter:', err);
+      callback(err);
+    } else {
+      console.log('Letter created successfully!');
+      callback(null, result.insertId);
+    }
+  });
+}
+//CRUD
+const newLetter = {
+  title: 'Sample Letter',
+  content: 'Lorem ipsum dolor sit amet...',
+  typeId: 1,
+  writerId: 1,
+  categoryId: 1
+};
+
+createLetter(newLetter, (err, insertedId) => {
+  if (err) {
+    console.error('Error creating letter:', err);
+  } else {
+    console.log('New letter created with ID:', insertedId);
+  }
+});
+//CRUD
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 // app.use(express.static("public"));
@@ -30,7 +88,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.use(methodOverride(function (req, res) {
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     // look in urlencoded POST bodies and delete it
@@ -39,9 +96,6 @@ app.use(methodOverride(function (req, res) {
     return method
   }
 }))
-
-//mongoose.connect("mongodb+srv://devinlatham20:Devlat411@blog.p0z8rju.mongodb.net/blogDB?retryWrites=true&w=majority", {useNewUrlParser: true});
-
 
 const userSchema = new mongoose.Schema ({
     email: String,
@@ -58,24 +112,10 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// const postSchema = new mongoose.Schema({
-//   title: String,
-//   content: String,
-// })
 
-// const Post = mongoose.model("Post", postSchema);
-
-
-// const aboutSchema = new mongoose.Schema({
-//   title: String,
-//   content: String,
-
-// })
-// const About = mongoose.model("About", aboutSchema);
 const homeStartingContent = "";
 const aboutContent = " about zach";
 const contactContent = "contact zach";
-
 
 let letters = [];
 
@@ -91,7 +131,6 @@ app.get('/', function (req,res){
   }
 
 })
-
 
 app.get("/home", function(req,res){
 
@@ -123,25 +162,23 @@ app.get('/letters', function(req,res){
   res.render('letters')
 });
 
-
-app.get('/banddirectorletters', function(req,res){
+app.get('/band-director-letters', function(req,res){
   res.render('banddirectorletters')
 });
 
-app.get('/choirdirectorletters', function(req,res){
+app.get('/choir-director-letters', function(req,res){
   res.render('choirdirectorletters')
 });
 
-app.get('/orchestradirectorletters', function(req,res){
+app.get('/orchestra-director-letters', function(req,res){
   res.render('orchestradirectorletters')
 });
 
-app.get('/musicaltheaterdirectorletters', function(req,res){
+app.get('/musical-theater-director-letters', function(req,res){
   res.render('musicaltheaterdirectorletters')
 });
 
-
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3100
 
 app.listen(PORT, function() {
   console.log(`Server started on port ${PORT}`);

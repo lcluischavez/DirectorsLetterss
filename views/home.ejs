@@ -1,79 +1,50 @@
- <%- include('partials/header') -%>
- 
- <!-- <link rel="stylesheet" href="/css/home-styles.css"> -->
- 
+<%- include('partials/header') -%>
 
+<main class="home-container">
+    <section class="home-hero">
+        <h2>Streamlined Letters
+            <br>
+            For Music Educators
+            <br>
+            By Music Educators<br>
+        </h2>        
+        <h5>At DirectorLetters.com, our mission is to empower music educators by 
+            relieving communication overload. With hundreds of templates for 
+            band, choir, orchesta, and musical theater directors, we give back precious time 
+            to inspire, create, and make music.
+        </h5>
+    </section>
 
-<div class="content">
-    <main class="main-container">
-
-        <section class="hero">
-            
-            <h2>Streamlined Letters
-                <br>
-                For Music Educators
-                <br>
-                By Music Educators<br>
-            </h2>
-
-            <h5>At DirectorLetters.com, our mission is to empower music educators by 
-                relieving communication overload. With hundreds of templates for 
-                band, choir, orchesta, and musical theater directors, we give back precious time 
-                to inspire, create, and make music.
-            </h5>
-            
-            
-            
-    
-        </section>
-        <section class="dropdown-categories">
-            
-            <div class="project-container">
-            <div class="proj-one">
-                
-                <h5>Band Director Letters</h5>
-                <h6></h6>
-                <p></p>
-               
+    <section class="home-letters">
+        <a href="/band-director-letters">
+            <div class="letter-one">
+                <h5>Band Director Letters</h5>  
             </div>
-            <div class="proj-two">
-                <div class="link-icons-extra">
-                    <a href=""><i class="fa-regular fa-folder"></i></a>
-                    <a href="https://github.com/DevinciCodes/Fine-Dining-Landing-Page-w-React"><i class="fa-brands fa-github grey-icons"></i></a>
-                    <a href="https://gericht-dining.tech/"><i class="fa-solid fa-file-export grey-icons"></i></a>
-                </div>
-                <h5>Choir Director Letters</h5>
-                <h6></h6>
-                <p></p>
+        </a>
+        <a href="/choir-director-letters"> 
+            <div class="letter-two">
+                <h5>Choir Director Letters</h5>  
             </div>
-            <div class="proj-three">
-                <div class="link-icons-extra">
-                    <a href=""><i class="fa-regular fa-folder"></i></a>
-                    <a href="https://github.com/DevinciCodes/Blog"><i class="fa-brands fa-github grey-icons"></i></a>
-                    <a href="https://shrouded-brushlands-23760.herokuapp.com/"><i class="fa-solid fa-file-export grey-icons"></i></a>
-                </div>
-                <h5>Orchestra Director Letters</h5>
-                <h6></h6>
-                <p></p>
+        </a>
+        <a href="/orchestra-director-letters">
+            <div class="letter-three">
+                <h5>Orchestra Director Letters</h5>  
             </div>
+        </a>
+        <a href="/musical-theater-director-letters">
+            <div  class="letter-four">
+                <h5>Musical Theater Director Letters</h5>  
+            </div>
+        </a>
+    </section>
 
-            <div class="proj-four">
-                
-                <h5>Musical Theater Director Letters</h5>
-                <h6></h6>
-                <p></p>
-               
-            </div>
+    <section class="about">
+        <div class="about-logo">
+            <img src="/images/directors-logo.png" alt="">
         </div>
-        </section>
-
-        <section class="about">
-            <div id="about-logo">
-                <img src="/images/directors-logo.png" alt="">
-             </div>
-            <div class="about-text">
-                <h3 class="about-title">About</h3>
-                <h6 class="about-body">Welcome to DirectorLetters.com, where we truly understand the multifaceted 
+        <div class="about-section">
+            <h3 class="about-title">About</h3>
+            <h6 class="about-body">Welcome to DirectorLetters.com, where we truly understand the multifaceted 
                 challenges of being a modern music educator. We wholeheartedly recognize that 
                 effective communication forms the very foundation of your success in this 
                 pivotal role. As a dedicated music educator, you bear the responsibility of 
@@ -88,56 +59,53 @@
                 you may find yourself continuously resorting to email as a means to provide 
                 your students with the essential details that will keep them connected and 
                 your music program flourishing with resounding success... <br> 
-                </h6>
-                <a href="/aboutus"><h4 class="about-page-link">More</h4></a>
-            </div>
-        </section>
-
-        <section class="External-links">
-            <div class="project-container">
-                <a href="https://www.accoladi.com/public">
-                    <div class="web-one">
-                        <h5>Accoladi</h5>
-                        <h6></h6>
-                        <p></p>
-                    </div>
-                </a>
-                <a href="https://www.nationalscholasticmusiciansawards.com/home">
-                    <div class="web-two">               
-                        <h5>National Scholastic Musician Awards</h5>
-                        <h6></h6>
-                        <p></p>
-                    </div>
-                </a>
-                <a href="https://www.mymusicfuture.com/">
-                    <div class="web-three">
-                        
-                        <h5>My Music Future</h5>
-                        <h6></h6>
-                        <p></p>
-                    </div>
+            </h6>
+            <div class="about-button">
+                <a href="/aboutus">
+                    <button class="btn">More</button>                       
                 </a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="connect">
-            <div class="connect-container">
-                <div class="connect-text">
-                    <h4>Let's Connect</h4>
-                    <h2>We're A Team Of Music Educators<br> Who Are Excited About Music Education</h2>
-                </div>
+    <section class="home-sites">
+        <div id="site">
+            <a href="https://www.accoladi.com/public">
+                <div class="web-one"></div>
+                <h5>Accoladi</h5>
+            </a>
+        </div>
+        <div id="site">
+            <a href="https://www.nationalscholasticmusiciansawards.com/home">
+                <div class="web-two"></div>
+                <h5>National Scholastic Musician Awards</h5>
+            </a>
+        </div>
+        <div id="site">
+            <a href="https://www.mymusicfuture.com/">
+                <div class="web-three"></div>
+                <h5>My Music Future</h5>
+            </a>
+        </div>
+    </section>
 
-                <div class="connect-button">
-                    <a href="/contact">
-                        <button class="btn">Connect</button>                       
-                    </a>                 
-                </div>
-            </div>
+    <section class="connect">
+        <div>
+            <h4>Let's Connect</h4>
+            <h2>
+                We're A Team Of Music Educators
+                <br> 
+                Who Are Excited About Music Education
+            </h2>
+        </div>
+        <div class="connect-button">
+            <a href="/contact">
+                <button class="btn">Connect</button>                       
+            </a>
+        </div>
+    </section>
+</main>
 
-        </section>
 
-    </main>
-</div>
-    
 
 <%- include('partials/footer') -%>
