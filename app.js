@@ -14,66 +14,6 @@ const { stringify } = require("querystring");
 const app = express();
 
 
-const mysql = require('mysql');
-
-// Create a connection pool
-const pool = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '1234',
-  database: 'directors-lettersDB',
-});
-
-// Test the connection
-pool.getConnection((err, connection) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-  } else {
-    console.log('Connected to the database!');
-    connection.release();
-  }
-});
-
-// CRUD
-function createLetter(letterData, callback) {
-  const query = 'INSERT INTO Letters (letter_title, content, letter_type_id, letter_writer_id, letter_category_id) VALUES (?, ?, ?, ?, ?)';
-  const values = [
-    letterData.title,
-    letterData.content,
-    letterData.typeId,
-    letterData.writerId,
-    letterData.categoryId
-  ];
-
-  pool.query(query, values, (err, result) => {
-    if (err) {
-      console.error('Error creating letter:', err);
-      callback(err);
-    } else {
-      console.log('Letter created successfully!');
-      callback(null, result.insertId);
-    }
-  });
-}
-//CRUD
-const newLetter = {
-  title: 'Sample Letter',
-  content: 'Lorem ipsum dolor sit amet...',
-  typeId: 1,
-  writerId: 1,
-  categoryId: 1
-};
-
-createLetter(newLetter, (err, insertedId) => {
-  if (err) {
-    console.error('Error creating letter:', err);
-  } else {
-    console.log('New letter created with ID:', insertedId);
-  }
-});
-//CRUD
-
-
 app.use(bodyParser.urlencoded({extended: true}));
 // app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, 'public')));
