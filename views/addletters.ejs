@@ -1,0 +1,81 @@
+<%- include('partials/header') -%>
+<h3>Add Letter</h3>
+<div class="row">
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="col s12">
+    <div class="row">
+        <div class="input-field">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title">
+            
+         </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field">
+            <label for="type">Type</label>
+            <select name="type" id="type">
+                <option value="public" selected>Band Director Letters</option>
+                <option value="private">Choir Director Letters</option>
+                <option value="private">Orchestra Director Letters</option>
+                <option value="private">Muscial Theater Director Letters</option>
+                {{!-- <option value="unpublished">Unpublished</option> --}}
+            </select>
+
+            <select name="type" id="type">
+                <option value="public" selected>Principal</option>
+                <option value="private">Muscial Theater Students</option>
+                <option value="private">Orchestra Parents</option>
+                <option value="private">Reference Letters</option>
+                {{!-- <option value="unpublished">Unpublished</option> --}}
+            </select>
+
+            <select name="type" id="type">
+                <option value="public" selected>Job/Position Information (includes interview, assistant needs, and resignation)</option>
+                <option value="private">Performances</option>
+                <option value="private">Travel/Trips</option>
+                <option value="private">Seasonal/Special Situations</option>
+                <option value="">Honors Opportunities</option>
+                <option value="">Financial Requests</option>
+                <option value="">Booster Club</option>
+                <option value="">Officers</option>
+                <option value="">Musical Theater Etiquette</option>
+                <option value="">National Scholastic Musicians Awards</option>
+                <option value="">Summer Enrichment</option>
+                <option value="">Other Opportunities (civic groups, etc.)</option>
+                <option value="">Black History Month</option>
+                <option value="">Career/Educational Advice</option>
+                <option value="">College</option>
+                <option value="">Organization Participation</option>
+                
+
+
+                {{!-- <option value="unpublished">Unpublished</option> --}}
+            </select>
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field">
+            <label for="myfile">Select a file:</label>
+            <input type="file" id="myfile" name="file">
+
+        </div>
+    </div>
+
+    <div class="row">
+        
+        <input type="submit" value="Upload" class="btn">
+        <a href="/dashboard" class="btn orange">Cancel</a>
+    </div>
+    </form>
+
+
+
+
+
+    
+</div>
+
+
+<%- include('partials/footer') -%>

@@ -1,6 +1,12 @@
 <%- include('partials/header') -%>
 
+<h1>Uploaded Files</h1>
 
+<% files.forEach(function(file) { %>
+    <h3><%= file.filename %></h3>
+    <a href="/download/<%= file.id %>">Download</a>
+    <hr />
+  <% }); %>
 
 
 
