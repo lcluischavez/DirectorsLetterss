@@ -8,6 +8,25 @@
 
     <section class="letters-section">
         <div class="letter-type">
+            <h3>List of Letters</h3>
+            <% if (letters.length > 0) { %>
+            <ul>
+                <% letters.forEach(function(letter) { %>
+                <li>
+                    <h2><%= letter.title %></h2>
+                    <p><%= letter.content %></p>
+                    <!-- Add more details based on your letter schema -->
+                </li>
+                <% }); %>
+            </ul>
+            <% } else { %>
+            <p>No letters found.</p>
+            <% } %>
+            <div class="letter-body">
+
+            </div>
+        </div>
+        <div class="letter-type">
             <a href="/band-director-letters">
                 <h3>
                     Band Director Letters

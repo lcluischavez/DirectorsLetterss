@@ -14,6 +14,7 @@ const { stringify } = require("querystring");
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }).single('file');
 const app = express();
+const pool = require('./db');
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -59,7 +60,7 @@ const homeStartingContent = "";
 const aboutContent = " about zach";
 const contactContent = "contact zach";
 
-let letters = [];
+//let letters = [];
 
 //redirect home if not logged in
 
@@ -74,22 +75,12 @@ app.get('/', function (req,res){
 
 })
 
-app.get("/home", function(req,res){
+app.get("/home", function(req,res){   
+    res.render('home') 
+});
 
-
-    
-      res.render('home')
-
-  
-  });
-
-  app.get("/aboutus", function(req,res){
-
-
-    
+app.get("/aboutus", function(req,res){ 
     res.render('about')
-
-
 });
 
 app.get("/contact", function(req,res){
@@ -100,20 +91,20 @@ app.get('/aboutus', function(req,res){
     res.render('about')
 });
 
-app.get('/letters', function(req,res){
-  res.render('letters')
+app.get('/letters', function(req, res) {
+  const query = 'SELECT * FROM directors_letters_db.letters';
+  pool.query(query, (err, result) => {
+    if (err) {
+      console.error('Error retrieving letters from the database:', err);
+      return;
+    }
+    const letters = result.rows;
+    res.render('letters', { letters }); // Render the 'letters' template and pass the 'letters' data
+  });
 });
 
 app.get('/band-director-letters', function(req,res){
-  const query = 'SELECT * FROM letters';
-  pool.query(query, (err, result) => {
-    if (err) {
-      console.error('Error retrieving files from the database:', err);
-      return;
-    }
-    const files = result.rows;
-    res.render('banddirectorletters', { letters }); // Render a template or send the files data to the client
-  });
+  res.render('banddirectorletters')
 });
   
 
@@ -131,44 +122,6 @@ app.get('/musical-theater-director-letters', function(req,res){
 
 app.get('/add-letters', function(req,res){
   res.render('addletters')
-});
-
-
-
-//add letter
-app.post('/upload', upload,  (req, res) => {
-  const file = req.file;
-  console.log(req.body.file)
-
-  // Save the file details to the database
-  const query = 'INSERT INTO letter (filename, filedata) VALUES ($1, $2)';
-  const values = [file.originalname, file.buffer];
-  
-  pool.query(query, values, (err, result) => {
-    if (err) {
-      console.error('Error inserting file into the database:', err);
-      return;
-    }
-    console.log('File uploaded and saved to the database');
-    res.redirect('/banddirectorletters'); // Redirect to the page that displays uploaded files
-  });
-});
-
-
-//dl letter
-app.get('/download/:id', (req, res) => {
-  const fileId = req.params.id;
-  const query = 'SELECT * FROM your_table_name WHERE id = $1';
-  const values = [fileId];
-  pool.query(query, values, (err, result) => {
-    if (err) {
-      console.error('Error retrieving file from the database:', err);
-      return;
-    }
-    const file = result.rows[0];
-    res.set('Content-Disposition', `attachment; filename="${file.filename}"`);
-    res.send(file.filedata);
-  });
 });
 
 
