@@ -76,10 +76,10 @@ app.get('/', function (req,res){
 })
 
 app.get("/home", function(req,res){   
-    res.render('home') 
-});
+      res.render('home') 
+  });
 
-app.get("/aboutus", function(req,res){ 
+  app.get("/aboutus", function(req,res){   
     res.render('about')
 });
 
