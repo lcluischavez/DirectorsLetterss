@@ -9,65 +9,21 @@
     <section class="letters-section">
         <div class="letter-type">
             <h3>List of Letters</h3>
-            <% if (letters.length > 0) { %>
-            <ul>
+            <div class="letters">
+                <% if (letters.length > 0) { %>
                 <% letters.forEach(function(letter) { %>
-                <li>
+                <div class="letter">
                     <h2><%= letter.title %></h2>
                     <p><%= letter.content %></p>
                     <!-- Add more details based on your letter schema -->
-                </li>
+                </div>
                 <% }); %>
-            </ul>
-            <% } else { %>
-            <p>No letters found.</p>
-            <% } %>
-            <div class="letter-body">
-
-            </div>
-        </div>
-        <div class="letter-type">
-            <a href="/band-director-letters">
-                <h3>
-                    Band Director Letters
-                </h3>
-            </a>
-            <div class="letter-body">
-
-            </div>
-        </div>
-        <div class="letter-type">
-            <a href="/choir-director-letters">
-                <h3>
-                    Choir Director Letters
-                </h3>
-            </a>
-            <div class="letter-body">
-
-            </div>
-        </div>
-        <div class="letter-type">
-            <a href="/orchestra-director-letters">
-                <h3>
-                    Orchestra Director Letters
-                </h3>
-            </a>
-            <div class="letter-body">
-
-            </div>
-        </div>
-        <div class="letter-type">
-            <a href="/musical-theater-director-letters">
-                <h3>
-                    Musical Theater Director Letters
-                </h3>
-            </a>
-            <div class="letter-body">
-
+                <% } else { %>
+                <p>No letters found.</p>
+                <% } %>
             </div>
         </div>
     </section>
 </main>
-
 
 <%- include('partials/footer') -%>

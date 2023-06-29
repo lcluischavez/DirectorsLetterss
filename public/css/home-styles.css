@@ -556,18 +556,16 @@ img {
     text-align: start;
 }
 
-/*------- ADD LETTERS PAGE --------*/
-
-.row{
-    margin: 0 auto;
-    width: 300px;
-    align-items: center;
-    align-self: center;
-    
-
+.letters{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
-.input-field{
-    display: flex;
-    flex-direction: column;
+.letter{
+    background-color: #f5d37a;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin: 1rem;
+    max-width: 20rem;
 }
