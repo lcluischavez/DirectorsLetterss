@@ -92,7 +92,15 @@ app.get('/aboutus', function(req,res){
 });
 
 app.get('/letters', function(req, res) {
-  const query = 'SELECT * FROM directors_letters_db.letters';
+  const query = `
+    SELECT l.letter_id, l.title, l.content,
+           lw.name AS writer_name,
+           lr.name AS recipient_name,
+           lc.name AS category_name
+    FROM directors_letters_db.letters l
+    INNER JOIN directors_letters_db.letterwriters lw ON l.writer_id = lw.writer_id
+    INNER JOIN directors_letters_db. letterrecipients lr ON l.recipient_id = lr.recipient_id
+    INNER JOIN directors_letters_db.lettercategories lc ON l.category_id = lc.category_id`;
   pool.query(query, (err, result) => {
     if (err) {
       console.error('Error retrieving letters from the database:', err);
