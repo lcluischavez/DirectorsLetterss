@@ -106,57 +106,49 @@ app.get('/aboutus', function(req,res){
 //LETTERS INCLUDING SEARCH
 app.get('/letters', function(req, res) {
   const searchQuery = req.query.search || '';
+  const categoryFilter = req.query.category || '';
 
-  // Modify the SQL query to include the WHERE clause for filtering based on searchQuery
-  const query = `SELECT l.*, w.name AS writer_name, r.name AS recipient_name, c.name AS category_name
-                 FROM directors_letters_db.letters l
-                 INNER JOIN directors_letters_db.letterwriters w ON l.writer_id = w.writer_id
-                 INNER JOIN directors_letters_db.letterrecipients r ON l.recipient_id = r.recipient_id
-                 INNER JOIN directors_letters_db.lettercategories c ON l.category_id = c.category_id
-                 WHERE l.title ILIKE $1 OR l.content ILIKE $1`;
-
-  const searchParam = `%${searchQuery}%`; // Add wildcard characters to search for partial matches
-
-  pool.query(query, [searchParam], (err, result) => {
+  // Fetch letter categories from the database
+  const categoryQuery = 'SELECT * FROM directors_letters_db.lettercategories';
+  pool.query(categoryQuery, (err, categoryResult) => {
     if (err) {
-      console.error('Error retrieving letters from the database:', err);
+      console.error('Error retrieving letter categories from the database:', err);
       return res.status(500).send('Internal Server Error');
     }
 
-    const letters = result.rows;
+    const lettercategories = categoryResult.rows;
 
-    res.render('letters', { letters, searchQuery });
+    // Modify the SQL query to include the WHERE clause for filtering based on searchQuery and categoryFilter
+    const query = `SELECT l.*, w.name AS writer_name, r.name AS recipient_name, c.name AS category_name
+                   FROM directors_letters_db.letters l
+                   INNER JOIN directors_letters_db.letterwriters w ON l.writer_id = w.writer_id
+                   INNER JOIN directors_letters_db.letterrecipients r ON l.recipient_id = r.recipient_id
+                   INNER JOIN directors_letters_db.lettercategories c ON l.category_id = c.category_id
+                   WHERE (l.title ILIKE $1 OR l.content ILIKE $1)
+                   ${categoryFilter ? 'AND c.category_id = $2' : ''}
+                   `;
+
+    const searchParam = `%${searchQuery}%`; // Add wildcard characters to search for partial matches
+    const queryParams = [searchParam];
+
+    if (categoryFilter) {
+      queryParams.push(categoryFilter);
+    }
+
+    pool.query(query, queryParams, (err, result) => {
+      if (err) {
+        console.error('Error retrieving letters from the database:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      const letters = result.rows;
+
+      res.render('letters', { letters, searchQuery, categoryFilter, lettercategories });
+    });
   });
 });
 
-app.get('/add-letter', function(req, res) {
-  // Fetch the writer, recipient, and category data from the database
-  const writerQuery = 'SELECT * FROM directors_letters_db.letterwriters';
-  const recipientQuery = 'SELECT * FROM directors_letters_db.letterrecipients';
-  const categoryQuery = 'SELECT * FROM directors_letters_db.lettercategories';
 
-  // Use Promise.all to execute all queries simultaneously
-  Promise.all([
-    pool.query(writerQuery),
-    pool.query(recipientQuery),
-    pool.query(categoryQuery)
-  ])
-    .then(([writerResult, recipientResult, categoryResult]) => {
-      const letterwriters = writerResult.rows;
-      const letterrecipients = recipientResult.rows;
-      const lettercategories = categoryResult.rows;
-
-      res.render('add-letter', {
-        letterwriters,
-        letterrecipients,
-        lettercategories
-      });
-    })
-    .catch((err) => {
-      console.error('Error retrieving data from the database:', err);
-      res.status(500).send('Internal Server Error');
-    });
-});
 
 app.post('/letters', function(req, res) {
   const { title, content, writer, recipient, category } = req.body;
