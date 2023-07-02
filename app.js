@@ -60,10 +60,14 @@ const homeStartingContent = "";
 const aboutContent = " about zach";
 const contactContent = "contact zach";
 
-//let letters = [];
+
+
+
+
+
+//ROUTES
 
 //redirect home if not logged in
-
 app.get('/', function (req,res){
   if(req.isAuthenticated()){
     res.redirect('/adminhome')
@@ -91,30 +95,39 @@ app.get('/aboutus', function(req,res){
     res.render('about')
 });
 
+
+
+
+
+
+
+//LETTER ROUTES
+
+//LETTERS INCLUDING SEARCH
 app.get('/letters', function(req, res) {
-  const query = `
-    SELECT l.letter_id, l.title, l.content,
-           lw.name AS writer_name,
-           lr.name AS recipient_name,
-           lc.name AS category_name
-    FROM directors_letters_db.letters l
-    INNER JOIN directors_letters_db.letterwriters lw ON l.writer_id = lw.writer_id
-    INNER JOIN directors_letters_db. letterrecipients lr ON l.recipient_id = lr.recipient_id
-    INNER JOIN directors_letters_db.lettercategories lc ON l.category_id = lc.category_id`;
-  pool.query(query, (err, result) => {
+  const searchQuery = req.query.search || '';
+
+  // Modify the SQL query to include the WHERE clause for filtering based on searchQuery
+  const query = `SELECT l.*, w.name AS writer_name, r.name AS recipient_name, c.name AS category_name
+                 FROM directors_letters_db.letters l
+                 INNER JOIN directors_letters_db.letterwriters w ON l.writer_id = w.writer_id
+                 INNER JOIN directors_letters_db.letterrecipients r ON l.recipient_id = r.recipient_id
+                 INNER JOIN directors_letters_db.lettercategories c ON l.category_id = c.category_id
+                 WHERE l.title ILIKE $1 OR l.content ILIKE $1`;
+
+  const searchParam = `%${searchQuery}%`; // Add wildcard characters to search for partial matches
+
+  pool.query(query, [searchParam], (err, result) => {
     if (err) {
       console.error('Error retrieving letters from the database:', err);
-      return;
+      return res.status(500).send('Internal Server Error');
     }
+
     const letters = result.rows;
-    res.render('letters', { letters }); // Render the 'letters' template and pass the 'letters' data
+
+    res.render('letters', { letters, searchQuery });
   });
 });
-
-
-
-
-
 
 app.get('/add-letter', function(req, res) {
   // Fetch the writer, recipient, and category data from the database
@@ -295,6 +308,11 @@ app.post('/letters/:id/delete', function(req, res) {
 
 
 
+
+
+
+
+
 app.get('/band-director-letters', function(req,res){
   res.render('banddirectorletters')
 });
@@ -321,8 +339,6 @@ app.get('/add-letters', function(req,res){
 
 
 ///sql connection
-
-
 const db = require('./db');
 
 db.query('SELECT * FROM directors_letters_db.lettercategories', (err, results) => {
@@ -332,6 +348,8 @@ db.query('SELECT * FROM directors_letters_db.lettercategories', (err, results) =
   }
   console.log('Query results:', results.rows);
 });
+
+
 
 
 
