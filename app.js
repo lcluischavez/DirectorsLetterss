@@ -154,6 +154,25 @@ app.post('/letters', function(req, res) {
   });
 });
 
+app.get('/letters/:id', function(req, res) {
+  const letterId = req.params.id;
+  const query = 'SELECT * FROM directors_letters_db.letters WHERE letter_id = $1';
+  pool.query(query, [letterId], (err, result) => {
+    if (err) {
+      console.error('Error retrieving letter from the database:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (result.rows.length === 0) {
+      return res.status(404).send('Letter not found');
+    }
+
+    const letter = result.rows[0];
+    res.render('letter-index', { letter });
+  });
+});
+
+
 
 
 
