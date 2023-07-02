@@ -12,14 +12,14 @@
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur.</p>
       <h5>Writer: <%= letter.writer_name %></h5>
       <h5>For: <%= letter.recipient_name %></h5>
-      <h5>Category: <%= letter.category_name %></h5>
+      <h5>Category: <%= letter.category_name %></h5> 
       <!-- Add more details based on your letter schema -->
 
       <!-- Edit button -->
       <a href="/letters/<%= letter.letter_id %>/edit">Edit</a>
 
       <!-- Delete button (using a form to send a DELETE request) -->
-      <form action="/letters/<%= letter.letter_id %>?_method=DELETE" method="POST">
+      <form action="/letters/<%= letter.letter_id %>/delete" method="POST">
         <button type="submit">Delete</button>
       </form>
     </div>

@@ -273,6 +273,19 @@ app.delete('/letters/:id', function(req, res) {
   });
 });
 
+app.post('/letters/:id/delete', function(req, res) {
+  const letterId = req.params.id;
+  const query = 'DELETE FROM directors_letters_db.letters WHERE letter_id = $1';
+
+  pool.query(query, [letterId], (err, result) => {
+    if (err) {
+      console.error('Error deleting letter:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    res.redirect('/letters');
+  });
+});
 
 
 
