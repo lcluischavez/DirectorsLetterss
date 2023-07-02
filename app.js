@@ -180,6 +180,100 @@ app.get('/letters/:id', function(req, res) {
   });
 });
 
+// Edit letter page
+app.get('/letters/:id/edit', function(req, res) {
+  const letterId = req.params.id;
+  const queryLetter = 'SELECT * FROM directors_letters_db.letters WHERE letter_id = $1';
+  const queryWriters = 'SELECT * FROM directors_letters_db.letterwriters';
+  const queryRecipients = 'SELECT * FROM directors_letters_db.letterrecipients';
+  const queryCategories = 'SELECT * FROM directors_letters_db.lettercategories';
+
+  pool.query(queryLetter, [letterId], (err, resultLetter) => {
+    if (err) {
+      console.error('Error retrieving letter from the database:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (resultLetter.rows.length === 0) {
+      return res.status(404).send('Letter not found');
+    }
+
+    const letter = resultLetter.rows[0];
+
+    // Fetch letterwriters data from the database
+    pool.query(queryWriters, (err, resultWriters) => {
+      if (err) {
+        console.error('Error retrieving letterwriters from the database:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      const letterwriters = resultWriters.rows;
+
+      // Fetch letterrecipients data from the database
+      pool.query(queryRecipients, (err, resultRecipients) => {
+        if (err) {
+          console.error('Error retrieving letterrecipients from the database:', err);
+          return res.status(500).send('Internal Server Error');
+        }
+
+        const letterrecipients = resultRecipients.rows;
+
+        // Fetch lettercategories data from the database
+        pool.query(queryCategories, (err, resultCategories) => {
+          if (err) {
+            console.error('Error retrieving lettercategories from the database:', err);
+            return res.status(500).send('Internal Server Error');
+          }
+
+          const lettercategories = resultCategories.rows;
+
+          res.render('edit-letter', {
+            letter,
+            letterwriters,
+            letterrecipients,
+            lettercategories
+          });
+        });
+      });
+    });
+  });
+});
+
+// Update letter
+app.post('/letters/:id/edit', function(req, res) {
+  const letterId = req.params.id;
+  const { title, content, writer, recipient, category } = req.body;
+
+  const updateQuery = 'UPDATE directors_letters_db.letters SET title = $1, content = $2, writer_id = $3, recipient_id = $4, category_id = $5 WHERE letter_id = $6';
+  const updateValues = [title, content, writer, recipient, category, letterId];
+
+  pool.query(updateQuery, updateValues, (err, result) => {
+    if (err) {
+      console.error('Error updating letter:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    console.log('Letter updated successfully');
+    res.redirect('/letters/' + letterId); // Redirect to the letter's index view or any other desired page
+  });
+});
+
+
+// Delete letter
+app.delete('/letters/:id', function(req, res) {
+  const letterId = req.params.id;
+  const query = 'DELETE FROM directors_letters_db.letters WHERE letter_id = $1';
+  pool.query(query, [letterId], (err) => {
+    if (err) {
+      console.error('Error deleting letter:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    res.redirect('/letters');
+  });
+});
+
+
 
 
 
