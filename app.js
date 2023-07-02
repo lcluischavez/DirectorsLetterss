@@ -412,8 +412,39 @@ app.get('/orchestra-director-letters', (req, res) => {
   });
 });
 
-app.get('/musical-theater-director-letters', function(req,res){
-  res.render('musicaltheaterdirectorletters')
+app.get('/musical-theater-director-letters', (req, res) => {
+  // Run the SQL query to retrieve letters written by "Musical Theater Directors"
+  const query = `
+    SELECT 
+        l.letter_id,
+        l.title,
+        l.content,
+        lw.name AS writer_name,
+        lr.name AS recipient_name,
+        lc.name AS category_name
+    FROM
+        directors_letters_db.letters l
+        JOIN directors_letters_db.letterwriters lw ON l.writer_id = lw.writer_id
+        JOIN directors_letters_db.letterrecipients lr ON l.recipient_id = lr.recipient_id
+        JOIN directors_letters_db.lettercategories lc ON l.category_id = lc.category_id
+    WHERE
+        lw.name = 'Musical Theater Director';
+  `;
+  
+  // Execute the query and retrieve the letters from the database
+  // Assuming you have a database connection pool or client instance called "db"
+  db.query(query, (error, result) => {
+    if (error) {
+      console.error('Error executing the SQL query:', error);
+      // Handle the error appropriately, e.g., by sending an error response
+      return res.status(500).send('Internal Server Error');
+    }
+
+    const retrievedLetters = result.rows;
+    
+    // Render the "musicaltheaterirectorletters.ejs" template and pass the retrieved letters data
+    res.render('musicaltheaterdirectorletters.ejs', { letters: retrievedLetters });
+  });
 });
 
 
