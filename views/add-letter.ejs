@@ -1,0 +1,43 @@
+<%- include('partials/header') -%>
+
+<main class="add-letter-container">
+  <section class="add-letter-section">
+    <h2>Add New Letter</h2>
+    <form action="/letters" method="POST">
+      <label for="title">Title:</label>
+      <input type="text" name="title" required>
+      
+      <label for="content">Content:</label>
+      <textarea name="content" rows="4" required></textarea>
+
+      <!-- Add additional form fields for writer, recipient, and category selection -->
+      <label for="writer">Writer:</label>
+      <select name="writer" required>
+        <!-- Populate the options with the writer names from your database -->
+        <% letterwriters.forEach(function(writer) { %>
+          <option value="<%= writer.writer_id %>"><%= writer.name %></option>
+        <% }); %>
+      </select>
+
+      <label for="recipient">Recipient:</label>
+      <select name="recipient" required>
+        <!-- Populate the options with the recipient names from your database -->
+        <% letterrecipients.forEach(function(recipient) { %>
+          <option value="<%= recipient.recipient_id %>"><%= recipient.name %></option>
+        <% }); %>
+      </select>
+
+      <label for="category">Category:</label>
+      <select name="category" required>
+        <!-- Populate the options with the category names from your database -->
+        <% lettercategories.forEach(function(category) { %>
+          <option value="<%= category.category_id %>"><%= category.name %></option>
+        <% }); %>
+      </select>
+
+      <button type="submit">Create Letter</button>
+    </form>
+  </section>
+</main>
+
+<%- include('partials/footer') -%>

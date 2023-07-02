@@ -103,6 +103,64 @@ app.get('/letters', function(req, res) {
   });
 });
 
+
+
+
+
+
+app.get('/add-letter', function(req, res) {
+  // Fetch the writer, recipient, and category data from the database
+  const writerQuery = 'SELECT * FROM directors_letters_db.letterwriters';
+  const recipientQuery = 'SELECT * FROM directors_letters_db.letterrecipients';
+  const categoryQuery = 'SELECT * FROM directors_letters_db.lettercategories';
+
+  // Use Promise.all to execute all queries simultaneously
+  Promise.all([
+    pool.query(writerQuery),
+    pool.query(recipientQuery),
+    pool.query(categoryQuery)
+  ])
+    .then(([writerResult, recipientResult, categoryResult]) => {
+      const letterwriters = writerResult.rows;
+      const letterrecipients = recipientResult.rows;
+      const lettercategories = categoryResult.rows;
+
+      res.render('add-letter', {
+        letterwriters,
+        letterrecipients,
+        lettercategories
+      });
+    })
+    .catch((err) => {
+      console.error('Error retrieving data from the database:', err);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
+app.post('/letters', function(req, res) {
+  const { title, content, writer, recipient, category } = req.body;
+
+  // Perform database query to insert the new letter
+  const query = 'INSERT INTO directors_letters_db.letters (title, content, writer_id, recipient_id, category_id) VALUES ($1, $2, $3, $4, $5)';
+  const values = [title, content, writer, recipient, category];
+
+  pool.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error inserting new letter into the database:', err);
+      return;
+    }
+    console.log('New letter inserted into the database');
+    res.redirect('/letters'); // Redirect to the letters page after creating the letter
+  });
+});
+
+
+
+
+
+
+
+
 app.get('/band-director-letters', function(req,res){
   res.render('banddirectorletters')
 });
