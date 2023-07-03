@@ -331,10 +331,10 @@ app.post('/letters/:id/delete', function(req, res) {
 
 
 
+app.get('/band-director-letters', function(req, res) {
+  const searchQuery = req.query.search || '';
+  const categoryFilter = req.query.category || '';
 
-
-app.get('/band-director-letters', (req, res) => {
-  // Run the SQL query to retrieve letters written by "Band Directors"
   const query = `
     SELECT 
         l.letter_id,
@@ -349,29 +349,44 @@ app.get('/band-director-letters', (req, res) => {
         JOIN directors_letters_db.letterrecipients lr ON l.recipient_id = lr.recipient_id
         JOIN directors_letters_db.lettercategories lc ON l.category_id = lc.category_id
     WHERE
-        lw.name = 'Band Director';
+        lw.name = 'Band Director'
+        ${categoryFilter ? `AND lc.category_id = ${categoryFilter}` : ''}
+        ${searchQuery ? `AND (l.title ILIKE '%${searchQuery}%' OR l.content ILIKE '%${searchQuery}%')` : ''}
   `;
-  
-  // Execute the query and retrieve the letters from the database
-  // Assuming you have a database connection pool or client instance called "db"
-  db.query(query, (error, result) => {
-    if (error) {
-      console.error('Error executing the SQL query:', error);
-      // Handle the error appropriately, e.g., by sending an error response
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      console.error('Error retrieving letters from the database:', err);
       return res.status(500).send('Internal Server Error');
     }
 
-    const retrievedLetters = result.rows;
-    
-    // Render the "banddirectorletters.ejs" template and pass the retrieved letters data
-    res.render('banddirectorletters.ejs', { letters: retrievedLetters });
+    const letters = result.rows;
+
+    // Get all letter categories for the filter dropdown
+    const categoryQuery = 'SELECT * FROM directors_letters_db.lettercategories';
+    pool.query(categoryQuery, (categoryErr, categoryResult) => {
+      if (categoryErr) {
+        console.error('Error retrieving letter categories from the database:', categoryErr);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      const lettercategories = categoryResult.rows;
+
+      res.render('banddirectorletters', {
+        letters,
+        searchQuery,
+        categoryFilter,
+        lettercategories
+      });
+    });
   });
 });
 
-  
 
-app.get('/choir-director-letters', (req, res) => {
-  // Run the SQL query to retrieve letters written by "Choir Directors"
+app.get('/choir-director-letters', function(req, res) {
+  const searchQuery = req.query.search || '';
+  const categoryFilter = req.query.category || '';
+
   const query = `
     SELECT 
         l.letter_id,
@@ -386,27 +401,45 @@ app.get('/choir-director-letters', (req, res) => {
         JOIN directors_letters_db.letterrecipients lr ON l.recipient_id = lr.recipient_id
         JOIN directors_letters_db.lettercategories lc ON l.category_id = lc.category_id
     WHERE
-        lw.name = 'Choir Director';
+        lw.name = 'Choir Director'
+        ${categoryFilter ? `AND lc.category_id = ${categoryFilter}` : ''}
+        ${searchQuery ? `AND (l.title ILIKE '%${searchQuery}%' OR l.content ILIKE '%${searchQuery}%')` : ''}
   `;
-  
-  // Execute the query and retrieve the letters from the database
-  // Assuming you have a database connection pool or client instance called "db"
-  db.query(query, (error, result) => {
-    if (error) {
-      console.error('Error executing the SQL query:', error);
-      // Handle the error appropriately, e.g., by sending an error response
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      console.error('Error retrieving letters from the database:', err);
       return res.status(500).send('Internal Server Error');
     }
 
-    const retrievedLetters = result.rows;
-    
-    // Render the "choirdirectorletters.ejs" template and pass the retrieved letters data
-    res.render('choirdirectorletters.ejs', { letters: retrievedLetters });
+    const letters = result.rows;
+
+    // Get all letter categories for the filter dropdown
+    const categoryQuery = 'SELECT * FROM directors_letters_db.lettercategories';
+    pool.query(categoryQuery, (categoryErr, categoryResult) => {
+      if (categoryErr) {
+        console.error('Error retrieving letter categories from the database:', categoryErr);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      const lettercategories = categoryResult.rows;
+
+      res.render('choirdirectorletters', {
+        letters,
+        searchQuery,
+        categoryFilter,
+        lettercategories
+      });
+    });
   });
 });
 
-app.get('/orchestra-director-letters', (req, res) => {
-  // Run the SQL query to retrieve letters written by "Orchestra Directors"
+
+
+app.get('/orchestra-director-letters', function(req, res) {
+  const searchQuery = req.query.search || '';
+  const categoryFilter = req.query.category || '';
+
   const query = `
     SELECT 
         l.letter_id,
@@ -421,27 +454,44 @@ app.get('/orchestra-director-letters', (req, res) => {
         JOIN directors_letters_db.letterrecipients lr ON l.recipient_id = lr.recipient_id
         JOIN directors_letters_db.lettercategories lc ON l.category_id = lc.category_id
     WHERE
-        lw.name = 'Orchestra Director';
+        lw.name = 'Orchestra Director'
+        ${categoryFilter ? `AND lc.category_id = ${categoryFilter}` : ''}
+        ${searchQuery ? `AND (l.title ILIKE '%${searchQuery}%' OR l.content ILIKE '%${searchQuery}%')` : ''}
   `;
-  
-  // Execute the query and retrieve the letters from the database
-  // Assuming you have a database connection pool or client instance called "db"
-  db.query(query, (error, result) => {
-    if (error) {
-      console.error('Error executing the SQL query:', error);
-      // Handle the error appropriately, e.g., by sending an error response
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      console.error('Error retrieving letters from the database:', err);
       return res.status(500).send('Internal Server Error');
     }
 
-    const retrievedLetters = result.rows;
-    
-    // Render the "orchestradirectorletters.ejs" template and pass the retrieved letters data
-    res.render('orchestradirectorletters.ejs', { letters: retrievedLetters });
+    const letters = result.rows;
+
+    // Get all letter categories for the filter dropdown
+    const categoryQuery = 'SELECT * FROM directors_letters_db.lettercategories';
+    pool.query(categoryQuery, (categoryErr, categoryResult) => {
+      if (categoryErr) {
+        console.error('Error retrieving letter categories from the database:', categoryErr);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      const lettercategories = categoryResult.rows;
+
+      res.render('orchestradirectorletters', {
+        letters,
+        searchQuery,
+        categoryFilter,
+        lettercategories
+      });
+    });
   });
 });
 
-app.get('/musical-theater-director-letters', (req, res) => {
-  // Run the SQL query to retrieve letters written by "Musical Theater Directors"
+
+app.get('/musical-theater-director-letters', function(req, res) {
+  const searchQuery = req.query.search || '';
+  const categoryFilter = req.query.category || '';
+
   const query = `
     SELECT 
         l.letter_id,
@@ -456,60 +506,38 @@ app.get('/musical-theater-director-letters', (req, res) => {
         JOIN directors_letters_db.letterrecipients lr ON l.recipient_id = lr.recipient_id
         JOIN directors_letters_db.lettercategories lc ON l.category_id = lc.category_id
     WHERE
-        lw.name = 'Musical Theater Director';
+        lw.name = 'Musical Theater Director'
+        ${categoryFilter ? `AND lc.category_id = ${categoryFilter}` : ''}
+        ${searchQuery ? `AND (l.title ILIKE '%${searchQuery}%' OR l.content ILIKE '%${searchQuery}%')` : ''}
   `;
-  
-  // Execute the query and retrieve the letters from the database
-  // Assuming you have a database connection pool or client instance called "db"
-  db.query(query, (error, result) => {
-    if (error) {
-      console.error('Error executing the SQL query:', error);
-      // Handle the error appropriately, e.g., by sending an error response
+
+  pool.query(query, (err, result) => {
+    if (err) {
+      console.error('Error retrieving letters from the database:', err);
       return res.status(500).send('Internal Server Error');
     }
 
-    const retrievedLetters = result.rows;
-    
-    // Render the "musicaltheaterirectorletters.ejs" template and pass the retrieved letters data
-    res.render('musicaltheaterdirectorletters.ejs', { letters: retrievedLetters });
+    const letters = result.rows;
+
+    // Get all letter categories for the filter dropdown
+    const categoryQuery = 'SELECT * FROM directors_letters_db.lettercategories';
+    pool.query(categoryQuery, (categoryErr, categoryResult) => {
+      if (categoryErr) {
+        console.error('Error retrieving letter categories from the database:', categoryErr);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      const lettercategories = categoryResult.rows;
+
+      res.render('musicaltheaterdirectorletters', {
+        letters,
+        searchQuery,
+        categoryFilter,
+        lettercategories
+      });
+    });
   });
 });
-
-app.get('/musical-theater-director-letters', (req, res) => {
-  // Run the SQL query to retrieve letters written by "Musical Theater Directors"
-  const query = `
-    SELECT 
-        l.letter_id,
-        l.title,
-        l.content,
-        lw.name AS writer_name,
-        lr.name AS recipient_name,
-        lc.name AS category_name
-    FROM
-        directors_letters_db.letters l
-        JOIN directors_letters_db.letterwriters lw ON l.writer_id = lw.writer_id
-        JOIN directors_letters_db.letterrecipients lr ON l.recipient_id = lr.recipient_id
-        JOIN directors_letters_db.lettercategories lc ON l.category_id = lc.category_id
-    WHERE
-        lw.name = 'Musical Theater Director';
-  `;
-  
-  // Execute the query and retrieve the letters from the database
-  // Assuming you have a database connection pool or client instance called "db"
-  db.query(query, (error, result) => {
-    if (error) {
-      console.error('Error executing the SQL query:', error);
-      // Handle the error appropriately, e.g., by sending an error response
-      return res.status(500).send('Internal Server Error');
-    }
-
-    const retrievedLetters = result.rows;
-    
-    // Render the "musicaltheaterirectorletters.ejs" template and pass the retrieved letters data
-    res.render('musicaltheaterdirectorletters.ejs', { letters: retrievedLetters });
-  });
-});
-
 
 
 

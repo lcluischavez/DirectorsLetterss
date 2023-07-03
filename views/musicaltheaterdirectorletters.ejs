@@ -8,6 +8,18 @@
     <section class="letters-section">
         <div class="letter-type">
             <h2>List of Musical Theater Director Letters</h2>
+            <form action="musical-theater-director-letters" method="GET">
+                <input type="text" name="search" placeholder="Search letters" value="<%= searchQuery %>">
+                <select name="category">
+                    <option value="">All Categories</option>
+                    <% lettercategories.forEach(function(category) { %>
+                    <option value="<%= category.category_id %>" <% if (categoryFilter == category.category_id) { %>selected<% } %>>
+                        <%= category.name %>
+                    </option>
+                    <% }); %>
+                </select>
+                <button type="submit">Search</button>
+            </form>
             <div class="letters">
                 <% if (letters.length > 0) { %>
                 <% letters.forEach(function(letter) { %>
