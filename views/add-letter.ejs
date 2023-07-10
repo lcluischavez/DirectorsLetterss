@@ -2,41 +2,37 @@
 
 <main class="add-letter-container">
   <section class="add-letter-section">
-    <h2>Add New Letter</h2>
-    <form action="/letters" method="POST">
-      <label for="title">Title:</label>
-      <input type="text" name="title" required>
-      
-      <label for="content">Content:</label>
-      <textarea name="content" rows="4" required></textarea>
+<!-- Add-Letter view -->
+<h1>Add New Letter</h1>
+<form action="/add-letter" method="POST" enctype="multipart/form-data">
+  <label for="title">Title:</label>
+  <input type="text" id="title" name="title" required>
+  <label for="writer">Writer:</label>
+  <select id="writer" name="writer" required>
+    <% letterwriters.forEach((writer) => { %>
+      <option value="<%= writer.writer_id %>"><%= writer.name %></option>
+    <% }); %>
+  </select>
+  <label for="recipient">Recipient:</label>
+  <select id="recipient" name="recipient" required>
+    <% letterrecipients.forEach((recipient) => { %>
+      <option value="<%= recipient.recipient_id %>"><%= recipient.name %></option>
+Continuation of the updated `add-letter.ejs` view:
 
-      <!-- Add additional form fields for writer, recipient, and category selection -->
-      <label for="writer">Writer:</label>
-      <select name="writer" required>
-        <!-- Populate the options with the writer names from your database -->
-        <% letterwriters.forEach(function(writer) { %>
-          <option value="<%= writer.writer_id %>"><%= writer.name %></option>
-        <% }); %>
-      </select>
+```ejs
+    <% }); %>
+  </select>
+  <label for="category">Category:</label>
+  <select id="category" name="category" required>
+    <% lettercategories.forEach((category) => { %>
+      <option value="<%= category.category_id %>"><%= category.name %></option>
+    <% }); %>
+  </select>
+  <label for="file">Select .docx File:</label>
+  <input type="file" id="file" name="file" accept=".docx" required>
+  <button type="submit">Add Letter</button>
+</form>
 
-      <label for="recipient">Recipient:</label>
-      <select name="recipient" required>
-        <!-- Populate the options with the recipient names from your database -->
-        <% letterrecipients.forEach(function(recipient) { %>
-          <option value="<%= recipient.recipient_id %>"><%= recipient.name %></option>
-        <% }); %>
-      </select>
-
-      <label for="category">Category:</label>
-      <select name="category" required>
-        <!-- Populate the options with the category names from your database -->
-        <% lettercategories.forEach(function(category) { %>
-          <option value="<%= category.category_id %>"><%= category.name %></option>
-        <% }); %>
-      </select>
-
-      <button type="submit">Create Letter</button>
-    </form>
   </section>
 </main>
 

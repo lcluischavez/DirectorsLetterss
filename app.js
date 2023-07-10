@@ -12,9 +12,15 @@ passportLocalMongoose = require('passport-local-mongoose')
 const methodOverride = require('method-override');
 const { stringify } = require("querystring");
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }).single('file');
 const app = express();
 const pool = require('./db');
+const fs = require('fs');
+const mammoth = require('mammoth');
+
+
+const upload = multer({ dest: 'uploads/' }).single('file');
+
+
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -104,7 +110,8 @@ app.get('/aboutus', function(req,res){
 //LETTER ROUTES
 
 //LETTERS INCLUDING SEARCH
-app.get('/letters', function(req, res) {
+// Retrieve letters from the database
+app.get('/letters', function (req, res) {
   const searchQuery = req.query.search || '';
   const categoryFilter = req.query.category || '';
 
@@ -119,14 +126,15 @@ app.get('/letters', function(req, res) {
     const lettercategories = categoryResult.rows;
 
     // Modify the SQL query to include the WHERE clause for filtering based on searchQuery and categoryFilter
-    const query = `SELECT l.*, w.name AS writer_name, r.name AS recipient_name, c.name AS category_name
-                   FROM directors_letters_db.letters l
-                   INNER JOIN directors_letters_db.letterwriters w ON l.writer_id = w.writer_id
-                   INNER JOIN directors_letters_db.letterrecipients r ON l.recipient_id = r.recipient_id
-                   INNER JOIN directors_letters_db.lettercategories c ON l.category_id = c.category_id
-                   WHERE (l.title ILIKE $1 OR l.content ILIKE $1)
-                   ${categoryFilter ? 'AND c.category_id = $2' : ''}
-                   `;
+    const query = `
+      SELECT l.*, w.name AS writer_name, r.name AS recipient_name, c.name AS category_name
+      FROM directors_letters_db.letters l
+      INNER JOIN directors_letters_db.letterwriters w ON l.writer_id = w.writer_id
+      INNER JOIN directors_letters_db.letterrecipients r ON l.recipient_id = r.recipient_id
+      INNER JOIN directors_letters_db.lettercategories c ON l.category_id = c.category_id
+      WHERE (l.title ILIKE $1 OR l.content::text ILIKE $1)
+      ${categoryFilter ? 'AND c.category_id = $2' : ''}
+    `;
 
     const searchParam = `%${searchQuery}%`; // Add wildcard characters to search for partial matches
     const queryParams = [searchParam];
@@ -148,7 +156,59 @@ app.get('/letters', function(req, res) {
   });
 });
 
-app.get('/add-letter', function(req, res) {
+// Upload .docx file
+app.post('/letters', upload, function (req, res) {
+  const { title, writer, recipient, category } = req.body;
+  const file = req.file;
+
+  // Perform database query to insert the new letter
+  const query = 'INSERT INTO directors_letters_db.letters (title, content, writer_id, recipient_id, category_id) VALUES ($1, $2, $3, $4, $5)';
+  const values = [title, file.buffer, writer, recipient, category];
+
+  pool.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error inserting new letter into the database:', err);
+      return;
+    }
+    console.log('New letter inserted into the database');
+    res.redirect('/letters'); // Redirect to the letters page after creating the letter
+  });
+});
+
+// Download .docx file
+app.get('/letters/:id/download', function (req, res) {
+  const letterId = req.params.id;
+  const query = 'SELECT * FROM directors_letters_db.letters WHERE letter_id = $1';
+
+  pool.query(query, [letterId], (err, result) => {
+    if (err) {
+      console.error('Error retrieving letter from the database:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (result.rows.length === 0) {
+      return res.status(404).send('Letter not found');
+    }
+
+    const letter = result.rows[0];
+
+    // Generate the file name for download
+    const fileName = `${letter.title}.docx`;
+    const filePath = path.join(__dirname, 'uploads', fileName);
+
+    // Set the appropriate headers for the file download
+    res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
+    res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+
+    // Stream the file to the response
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
+  });
+});
+
+
+// Render the form for adding a new letter
+app.get('/add-letter', function (req, res) {
   // Fetch the writer, recipient, and category data from the database
   const writerQuery = 'SELECT * FROM directors_letters_db.letterwriters';
   const recipientQuery = 'SELECT * FROM directors_letters_db.letterrecipients';
@@ -177,24 +237,133 @@ app.get('/add-letter', function(req, res) {
     });
 });
 
-
-app.post('/letters', function(req, res) {
-  const { title, content, writer, recipient, category } = req.body;
-
-  // Perform database query to insert the new letter
-  const query = 'INSERT INTO directors_letters_db.letters (title, content, writer_id, recipient_id, category_id) VALUES ($1, $2, $3, $4, $5)';
-  const values = [title, content, writer, recipient, category];
-
-  pool.query(query, values, (err, result) => {
-    if (err) {
-      console.error('Error inserting new letter into the database:', err);
-      return;
+// Handle the submission of the new letter form
+app.post('/add-letter', function (req, res) {
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      console.error('Error uploading file:', err);
+      return res.status(500).send('Error uploading file. Please try again.');
+    } else if (err) {
+      console.error('Error uploading file:', err);
+      return res.status(500).send('Error uploading file. Please try again.');
     }
-    console.log('New letter inserted into the database');
-    res.redirect('/letters'); // Redirect to the letters page after creating the letter
+
+    // Extract form data
+    const { title, writer, recipient, category } = req.body;
+    const file = req.file;
+
+    // Read the uploaded .docx file and convert it to HTML
+    const filePath = path.join(__dirname, 'uploads', file.filename);
+    const fileBuffer = fs.readFileSync(filePath);
+
+    mammoth.convertToHtml({ buffer: fileBuffer })
+      .then((result) => {
+        // Extract the HTML content from the result
+        const htmlContent = result.value;
+
+        // Store the letter data in the database
+        const query = 'INSERT INTO directors_letters_db.letters (title, content, writer_id, recipient_id, category_id) VALUES ($1, $2, $3, $4, $5)';
+        const values = [title, htmlContent, writer, recipient, category];
+
+        pool.query(query, values, (dbErr) => {
+          if (dbErr) {
+            console.error('Error inserting new letter into the database:', dbErr);
+            return res.status(500).send('Error inserting new letter. Please try again.');
+          }
+
+          console.log('New letter inserted into the database');
+          res.redirect('/letters'); // Redirect to the letters page after creating the letter
+        });
+      })
+      .catch((conversionErr) => {
+        console.error('Error converting .docx to HTML:', conversionErr);
+        return res.status(500).send('Error converting .docx to HTML. Please try again.');
+      });
   });
 });
 
+// ...
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));// Render the form for adding a new letter
+app.get('/add-letter', function (req, res) {
+  // Fetch the writer, recipient, and category data from the database
+  const writerQuery = 'SELECT * FROM directors_letters_db.letterwriters';
+  const recipientQuery = 'SELECT * FROM directors_letters_db.letterrecipients';
+  const categoryQuery = 'SELECT * FROM directors_letters_db.lettercategories';
+
+  // Use Promise.all to execute all queries simultaneously
+  Promise.all([
+    pool.query(writerQuery),
+    pool.query(recipientQuery),
+    pool.query(categoryQuery)
+  ])
+    .then(([writerResult, recipientResult, categoryResult]) => {
+      const letterwriters = writerResult.rows;
+      const letterrecipients = recipientResult.rows;
+      const lettercategories = categoryResult.rows;
+
+      res.render('add-letter', {
+        letterwriters,
+        letterrecipients,
+        lettercategories
+      });
+    })
+    .catch((err) => {
+      console.error('Error retrieving data from the database:', err);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
+// Handle the submission of the new letter form
+app.post('/add-letter', function (req, res) {
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      console.error('Error uploading file:', err);
+      return res.status(500).send('Error uploading file. Please try again.');
+    } else if (err) {
+      console.error('Error uploading file:', err);
+      return res.status(500).send('Error uploading file. Please try again.');
+    }
+
+    // Extract form data
+    const { title, writer, recipient, category } = req.body;
+    const file = req.file;
+
+    // Read the uploaded .docx file and convert it to HTML
+    const filePath = path.join(__dirname, 'uploads', file.filename);
+    const fileBuffer = fs.readFileSync(filePath);
+
+    mammoth.convertToHtml({ buffer: fileBuffer })
+      .then((result) => {
+        // Extract the HTML content from the result
+        const htmlContent = result.value;
+
+        // Store the letter data in the database
+        const query = 'INSERT INTO directors_letters_db.letters (title, content, writer_id, recipient_id, category_id) VALUES ($1, $2, $3, $4, $5)';
+        const values = [title, htmlContent, writer, recipient, category];
+
+        pool.query(query, values, (dbErr) => {
+          if (dbErr) {
+            console.error('Error inserting new letter into the database:', dbErr);
+            return res.status(500).send('Error inserting new letter. Please try again.');
+          }
+
+          console.log('New letter inserted into the database');
+          res.redirect('/letters'); // Redirect to the letters page after creating the letter
+        });
+      })
+      .catch((conversionErr) => {
+        console.error('Error converting .docx to HTML:', conversionErr);
+        return res.status(500).send('Error converting .docx to HTML. Please try again.');
+      });
+  });
+});
+
+// ...
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.get('/letters/:id', function(req, res) {
   const letterId = req.params.id;
   const query = 'SELECT * FROM directors_letters_db.letters WHERE letter_id = $1';
@@ -212,6 +381,50 @@ app.get('/letters/:id', function(req, res) {
     res.render('letter-index', { letter });
   });
 });
+
+app.get('/view-docx/:id', function(req, res) {
+  const letterId = req.params.id;
+  const query = 'SELECT * FROM directors_letters_db.letters WHERE letter_id = $1';
+  pool.query(query, [letterId], (err, result) => {
+    if (err) {
+      console.error('Error retrieving letter from the database:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    if (result.rows.length === 0) {
+      return res.status(404).send('Letter not found');
+    }
+
+    const letter = result.rows[0];
+    const fileData = letter.content;
+    const filePath = `uploads/${letter.title}.docx`;
+
+    // Save the binary data to a file
+    fs.writeFile(filePath, fileData, (writeErr) => {
+      if (writeErr) {
+        console.error('Error saving file:', writeErr);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      // Set the content-disposition header to force download the file
+      res.setHeader('Content-Disposition', 'attachment; filename=' + path.basename(filePath));
+      res.sendFile(path.resolve(filePath), (sendErr) => { // Use path.resolve() to get the absolute path
+        if (sendErr) {
+          console.error('Error sending file:', sendErr);
+          return res.status(500).send('Internal Server Error');
+        }
+
+        // Delete the file after it is sent
+        fs.unlink(filePath, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error('Error deleting file:', unlinkErr);
+          }
+        });
+      });
+    });
+  });
+});
+
 
 // Edit letter page
 app.get('/letters/:id/edit', function(req, res) {

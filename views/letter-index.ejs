@@ -7,21 +7,17 @@
 
   <section class="letter-index-section">
     <div class="letter">
-      <h3><%= letter.title %></h3>
-      <p><%= letter.content %></p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur.</p>
-      <h5>Writer: <%= letter.writer_name %></h5>
-      <h5>For: <%= letter.recipient_name %></h5>
-      <h5>Category: <%= letter.category_name %></h5> 
-      <!-- Add more details based on your letter schema -->
+      <h1><%= letter.title %></h1>
+<div>
+  <iframe id="docViewer" src="/view-docx/<%= letter.letter_id %>"></iframe>
+</div>
 
-      <!-- Edit button -->
-      <a href="/letters/<%= letter.letter_id %>/edit">Edit</a>
+<script src="/js/viewer.min.js"></script>
+<script>
+  // Initialize Viewer.js for the document iframe
+  const docViewer = new Viewer(document.getElementById('docViewer'));
+</script>
 
-      <!-- Delete button (using a form to send a DELETE request) -->
-      <form action="/letters/<%= letter.letter_id %>/delete" method="POST">
-        <button type="submit">Delete</button>
-      </form>
     </div>
   </section>
 </main>
